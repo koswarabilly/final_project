@@ -19,7 +19,8 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 
 public class customerController implements Initializable {
-
+    private int rowselected;
+    private boolean edit;
     @FXML
     private TextField txtname;
     @FXML
@@ -59,7 +60,7 @@ public class customerController implements Initializable {
         btnSave.setOnMouseClicked(this::onBtnSaveClick);
         btnCancel.setOnMouseClicked(this::onBtnCancelClick);
         tableCustomer.setOnMouseClicked(this::onRowClick);
-
+        btnDelete.setOnMouseClicked(this::onBtnDeleteClick);
     }
 
     private String getNameFromInput() throws IllegalArgumentException {
@@ -71,6 +72,20 @@ public class customerController implements Initializable {
     }
 
     public void onBtnCancelClick(MouseEvent e) {
+        edit=false;
+        txtname.clear();
+        checkindt.getEditor().clear();
+        checkoutdt.getEditor().clear();
+        checkindt.setVisible(true);
+        checkoutdt.setVisible(true);
+        lblcheckin.setVisible(false);
+        lblcheckout.setVisible(false);
+        txtroom.clear();
+    }
+    
+    public void onBtnDeleteClick(MouseEvent e){
+        edit=false;
+        tableCustomer.getItems().remove(tableCustomer.getSelectionModel().getSelectedItem());
         txtname.clear();
         checkindt.getEditor().clear();
         checkoutdt.getEditor().clear();
@@ -84,6 +99,7 @@ public class customerController implements Initializable {
     public void onRowClick(MouseEvent e) {
         if (e.getClickCount() == 2) //Checking double click
         {
+            edit=true;
             txtname.setText(tableCustomer.getSelectionModel().getSelectedItem().getName());
             lblcheckin.setVisible(true);
             lblcheckout.setVisible(true);
@@ -92,6 +108,7 @@ public class customerController implements Initializable {
             checkindt.setVisible(false);
             checkoutdt.setVisible(false);
             txtroom.setText(tableCustomer.getSelectionModel().getSelectedItem().getRoom().toString());
+            rowselected=tableCustomer.getSelectionModel().getSelectedIndex();
         }
     }
 
@@ -139,8 +156,16 @@ public class customerController implements Initializable {
         checkindt.getEditor().clear();
         checkoutdt.getEditor().clear();
         txtroom.clear();
-
-        tableCustomer.getItems().add(new Customer(name, checkindtx, checkoutdtx, room));
+        if(edit==true){
+            tableCustomer.getItems().set(rowselected, new Customer(name, checkindtx, checkoutdtx, room));
+        }else{
+            tableCustomer.getItems().add(new Customer(name, checkindtx, checkoutdtx, room));
+        }
+        edit=false;
+        checkindt.setVisible(true);
+        checkoutdt.setVisible(true);
+        lblcheckin.setVisible(false);
+        lblcheckout.setVisible(false);
         txtname.requestFocus();
     }
 
