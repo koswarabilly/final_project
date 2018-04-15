@@ -13,11 +13,13 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 
 public class applicationController implements Initializable {
-    
+    connectDb condb = new connectDb();
     @FXML
     private BorderPane showpane;
     @FXML
     private Label lblwelcome;
+    @FXML
+    private Label lblstatus;
     @FXML
     private Button btnCustomer;
     @FXML
@@ -25,6 +27,11 @@ public class applicationController implements Initializable {
     
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        if(this.condb.isDatabaseConnected()){
+            lblstatus.setText("Connected to database");
+        }else{
+            lblstatus.setText("Can not connect to database");
+        }
         btnCustomer.setOnMouseClicked(this::onCustomerClick);
         btnWorker.setOnMouseClicked(this::onWorkerClick);
     }
