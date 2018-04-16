@@ -190,7 +190,7 @@ public class workerController implements Initializable {
         try {
             sincex = since.getValue().toString();
         } catch (NullPointerException e) {
-            messageBox("Hotel System", "Check out date can't be nothing").showAndWait();
+            if(edit==false) messageBox("Hotel System", "Employeed since can't be nothing").showAndWait();
             txtname.requestFocus();
         }
         
